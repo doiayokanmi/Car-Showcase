@@ -47,3 +47,8 @@ export interface CustomFilterProps {
   title: string;
   options: optionsProp;
 }
+
+export interface ShowMoreProps {
+  pageNumber: number;
+  isNext: boolean;
+}
