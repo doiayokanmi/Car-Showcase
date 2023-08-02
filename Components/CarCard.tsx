@@ -1,8 +1,10 @@
+"use client";
+
 import { carProps } from "@/types";
 import Image from "next/image";
 import React, { useState } from "react";
-import { CustomButton } from ".";
-import { calculateCarRent } from "@/utils";
+import { CarDetails, CustomButton } from ".";
+import { calculateCarRent, generateCarImageUrl } from "@/utils";
 
 interface carCardProps {
   car: carProps;
@@ -10,6 +12,8 @@ interface carCardProps {
 const CarCard = ({ car }: carCardProps) => {
   const { city_mpg, year, make, model, transmission, drive } = car;
   const carRent = calculateCarRent(city_mpg, year);
+
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="car-card group">
       <div className="car-card__content">
@@ -30,7 +34,7 @@ const CarCard = ({ car }: carCardProps) => {
 
       <div className="relative w-full h-40 my-3 object-contain">
         <Image
-          src="/hero.png"
+          src={generateCarImageUrl(car)}
           alt="car model"
           fill
           priority
@@ -58,16 +62,27 @@ const CarCard = ({ car }: carCardProps) => {
           </div>
 
           <div className="flex flex-col justify-between items-center gap-2">
-            <Image
-              src="/steering-wheel.svg"
-              width={20}
-              height={20}
-              alt="wheel"
-            />
+            <Image src="/gas.svg" width={20} height={20} alt="wheel" />
             <p className="text-[14px]">{city_mpg} MPG</p>
           </div>
         </div>
+
+        <div className="car-card__btn-container">
+          <CustomButton
+            title="view More"
+            containerStyles="w-full py-[16px] rounded-full bg-primary-blue"
+            textStyles="text-white text-[14px] leading-[17px] font-bold"
+            rightIcon="/right-arrow.svg"
+            handleClick={() => setIsOpen(true)}
+          />
+        </div>
       </div>
+
+      <CarDetails
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+        car={car}
+      />
     </div>
   );
 };
